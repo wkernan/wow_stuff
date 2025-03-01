@@ -1,5 +1,9 @@
 import requests
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 class BlizzardClient:
@@ -8,6 +12,8 @@ class BlizzardClient:
         self.headers = {"Authorization": f"Bearer {self.token}"}
 
     def _get_access_token(self):
+        print(os.getenv("CLIENT_ID"))
+        print(os.getenv("CLIENT_SECRET"))
         url = "https://oauth.battle.net/token"
         data = {"grant_type": "client_credentials"}
         auth = (os.getenv("CLIENT_ID"), os.getenv("CLIENT_SECRET"))

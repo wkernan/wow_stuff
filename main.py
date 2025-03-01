@@ -1,5 +1,5 @@
 from blizzard_client import BlizzardClient
-from twilio_client import TwilioClient
+from mailgun_client import send_simple_message
 
 PRICE_THRESHOLD = 1000  # 1000 gold
 
@@ -9,7 +9,6 @@ def main():
     print("Fetching Blizzard OAuth token...")
     client = BlizzardClient()
     commodities_data = client.fetch_commodities_data()
-
     if commodities_data:
         print("\n=== Auction House Prices ===")
         for auction in commodities_data.get("auctions", []):
@@ -19,7 +18,10 @@ def main():
                 )  # Convert to gold
                 quantity = auction["quantity"]
                 if price < PRICE_THRESHOLD:
-                    TwilioClient().send_sms_alert(price, quantity)
+                    print(
+                        f"Bismuth Rank 3 Price: {price} gold (Qty: {quantity}) - Below Threshold!"
+                    )
+                    send_simple_message(price, quantity)
                 print(f"Bismuth Rank 3 Price: {price} gold (Qty: {quantity})")
                 return
 
